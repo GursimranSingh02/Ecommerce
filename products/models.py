@@ -63,6 +63,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    imagePath = models.CharField(max_length=500, blank=True, default="")
     inStock = models.BooleanField(default=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now=True)
