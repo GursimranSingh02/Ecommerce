@@ -42,12 +42,16 @@ class ProductCreateView(APIView):
 
         return Response(
             {
-                "id": product.pk,
-                "name": product.name,
-                "description": product.description,
-                "price": product.price,
-                "inStock": product.inStock,
-                "imagePath": product.imagePath,
+                "status": status.HTTP_201_CREATED,
+                "message": "Product created successfully.",
+                "data": {
+                    "id": product.pk,
+                    "name": product.name,
+                    "description": product.description,
+                    "price": product.price,
+                    "inStock": product.inStock,
+                    "imagePath": product.imagePath,
+                },
             },
             status=status.HTTP_201_CREATED,
         )
@@ -62,13 +66,21 @@ class ProductListView(APIView):
             page_size = int(request.query_params.get("pageSize", 10))
         except (TypeError, ValueError):
             return Response(
-                {"detail": "page and pageSize must be positive integers."},
+                {
+                    "status": status.HTTP_400_BAD_REQUEST,
+                    "message": "page and pageSize must be positive integers.",
+                    "data": None,
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
         if page < 1 or page_size < 1:
             return Response(
-                {"detail": "page and pageSize must be positive integers."},
+                {
+                    "status": status.HTTP_400_BAD_REQUEST,
+                    "message": "page and pageSize must be positive integers.",
+                    "data": None,
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -79,18 +91,22 @@ class ProductListView(APIView):
 
         return Response(
             {
-                "products": [
-                    {
-                        "id": product.pk,
-                        "name": product.name,
-                        "description": product.description,
-                        "price": product.price,
-                        "inStock": product.inStock,
-                        "imagePath": product.imagePath,
-                    }
-                    for product in page_products
-                ],
-                "nextPage": products.count() > end,
+                "status": status.HTTP_200_OK,
+                "message": "Products retrieved successfully.",
+                "data": {
+                    "products": [
+                        {
+                            "id": product.pk,
+                            "name": product.name,
+                            "description": product.description,
+                            "price": product.price,
+                            "inStock": product.inStock,
+                            "imagePath": product.imagePath,
+                        }
+                        for product in page_products
+                    ],
+                    "nextPage": products.count() > end,
+                },
             },
             status=status.HTTP_200_OK,
         )
