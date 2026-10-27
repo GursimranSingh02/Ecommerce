@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 from dotenv import load_dotenv
 
@@ -47,6 +48,12 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = "products.User"
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        days=int(os.getenv("TOKEN_LIFETIME_DAYS", "7"))
+    ),
+}
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
